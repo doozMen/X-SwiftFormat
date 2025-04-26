@@ -1,31 +1,29 @@
 import Cocoa
+import SwiftFormat
 
 class XSFDocHandler: NSObject {
 
-	static func handle(filenames: [String]) {
-		for filename in filenames {
-			let components = filename.split(separator: "/")
-			if let last = components.last {
-				let split = last.split(separator: ".")
-				if split.count == 2 {
-					readSwiftFormatFile(with: URL(fileURLWithPath: filename))
-				}
-			}
-		}
-	}
+  static func handle(filenames: [String]) {
+    for filename in filenames {
+      let components = filename.split(separator: "/")
+      if let last = components.last {
+        let split = last.split(separator: ".")
+        if split.count == 2 {
+          let fileExtension = split[1].lowercased()
+          if fileExtension == "swift-format" || fileExtension == "json" {
+            readConfigurationFile(with: URL(fileURLWithPath: filename))
+          }
+        }
+      }
+    }
+  }
 
-	static func readSwiftFormatFile(with url: URL) {
-
-		if let data = try? Data(contentsOf: url), let json = data.json as? [String: Any] {
-			var configuration: [String: Any] = [:]
-			for entry in json {
-				let key = entry.key
-				let value = entry.value
-				if key != "metadata" {
-					configuration[key] = value
-				}
-			}
-			Notifications.shared.postNotification(name: .readXSFFile, object: configuration)
-		}
-	}
+  static func readConfigurationFile(with url: URL) {
+    do {
+      let configuration = try Configuration(contentsOf: url)
+      Notifications.shared.postNotification(name: .readXSFFile, object: configuration)
+    } catch {
+      print("Error reading configuration file: \(error)")
+    }
+  }
 }

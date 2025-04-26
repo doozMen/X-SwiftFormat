@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../swift-format"
+		}
+	],
+	"settings": {
+		"sweetpad.build.xcodeWorkspacePath": "x-swiftformat/X-SwiftFormat.xcodeproj/project.xcworkspace"
+	}
+}

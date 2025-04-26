@@ -1,6 +1,5 @@
 import Cocoa
 import SwiftFormat
-import SwiftFormatConfiguration
 
 extension PreviewViewController {
 
@@ -19,7 +18,7 @@ extension PreviewViewController {
 		var swiftFormatOutputStream = SwiftFormatOutputStream()
 
 		do {
-			try swiftFormatter.format(source: self.previewEditor.string, assumingFileURL: nil, to: &swiftFormatOutputStream)
+			try swiftFormatter.format(source: self.previewEditor.string, assumingFileURL: nil, selection: .infinite, to: &swiftFormatOutputStream)
 			if let output = swiftFormatOutputStream.output {
 				self.previewEditor.string = output
 			}
@@ -33,6 +32,9 @@ extension PreviewViewController {
 					informativeText = "The requested file was a directory."
 				case .fileContainsInvalidSyntax:
 					informativeText = "The file contains invalid or unrecognized Swift syntax and cannot be handled safely."
+				case .unrecognizedExperimentalFeature(let feature):
+					informativeText = "Experimental feature \(feature) does not exist"
+
 				}
 			}
 			let alert = NSAlert()

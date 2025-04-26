@@ -12,7 +12,7 @@ extension AppDelegate {
 			openPanel.beginSheetModal(for: window) { response in
 				if response.rawValue == 1 {
 					if let url = openPanel.urls.first {
-						XSFDocHandler.readSwiftFormatFile(with: url)
+						XSFDocHandler.readConfigurationFile(with: url)
 					}
 				}
 			}
